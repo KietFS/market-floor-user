@@ -7,7 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Control, Controller, useForm } from "react-hook-form";
 
 //icons
 import {
@@ -38,6 +38,7 @@ interface IInputProps
   label?: string | null;
   isRequired?: boolean;
   hasEvent?: boolean;
+  control: Control;
   onClickEvent?: () => void;
   // use onChangeValue instead of onChange, since Formik will overwrite the onChange
   onChangeValue?: (value: string | number) => void;
@@ -56,14 +57,10 @@ const Input: React.FC<IInputProps> = (props) => {
     onClickEvent,
     onChangeValue,
     mode = "text",
+    control,
   } = props;
   const [focus, setFocus] = useState<boolean>(false);
-  const {
-    setValue,
-    formState: {},
-    control,
-  } = useForm();
-
+  const {} = useForm();
   const objectTypes = {
     email: {
       icon: <EnvelopeIcon width={20} height={20} color="gray" />,
@@ -92,10 +89,6 @@ const Input: React.FC<IInputProps> = (props) => {
     },
   };
 
-  const onValueChange = (phoneNumber: string) => {
-    setValue(name, phoneNumber);
-  };
-
   const handleOnBlur = () => {
     setFocus(false);
   };
@@ -112,13 +105,14 @@ const Input: React.FC<IInputProps> = (props) => {
         <>
           <TextField
             InputProps={{ sx: { height: 44 } }}
-            type={props.mode}
+            type={mode}
             placeholder={props.placeholder}
             fullWidth
+            value={value}
             label={label}
             id="input"
             onChange={(e) => {
-              console.log("E", e);
+              onChange(e.target.value);
             }}
             sx={{
               "& .MuiInputLabel-root": {

@@ -9,7 +9,33 @@ import { useForm } from "react-hook-form";
 interface ILoginPageProps {}
 
 const LoginPage: React.FC<ILoginPageProps> = (props) => {
-  const { control } = useForm();
+  const { control, handleSubmit } = useForm();
+
+  const handlePressLogin = async (values: any) => {
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: values,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Login successful:", data);
+        // Handle successful login (e.g., redirect to dashboard)
+      } else {
+        const errorData = await response.json();
+        console.error("Login failed:", errorData);
+        // Handle login failure (e.g., show error message)
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+      // Handle network or other errors
+    }
+  };
+
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-white">
       <Box
@@ -47,19 +73,28 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
           />
         </Button>
 
-        <form className="w-full flex gap-y-6 flex-col">
+        <form
+          onSubmit={handleSubmit(handlePressLogin)}
+          className="w-full flex gap-y-6 flex-col"
+        >
           <Input
             name="phoneNumber"
+            control={control}
             label="Số điện thoại"
             placeholder="Nhập số điện thoại của bạn"
           />
           <Input
+            control={control}
             name="password"
             label="Mật khẩu"
             placeholder="Nhập mật khẩu của bạn"
             mode="password"
           />
-          <Button variant="contained" sx={{ mt: 2 }}>
+          <Button
+            type="submit" // Ensure the button type is submit
+            variant="contained"
+            sx={{ mt: 2 }}
+          >
             Continue with phone number
           </Button>
         </form>
