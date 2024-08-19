@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Lexend } from "next/font/google";
 import "./globals.css";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import theme from "@/theme";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Lexend({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +19,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
