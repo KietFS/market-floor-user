@@ -39,20 +39,29 @@ const theme = createTheme({
     h3: {
       color: "#000000",
     },
+    h6: {
+      color: "#000000",
+    },
     button: {
       color: "#ffffff",
     },
   },
   components: {
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#ffffff",
+        },
+      },
+    },
+
     MuiButton: {
       styleOverrides: {
         root: {
-          // Common styles for all buttons
           textTransform: "none",
           fontWeight: 500,
         },
         contained: {
-          // Styles for the contained (default) button
           backgroundColor: "#000000",
           color: "#ffffff",
           "&:hover": {
@@ -60,7 +69,6 @@ const theme = createTheme({
           },
         },
         outlined: {
-          // Styles for the outlined button
           borderColor: "#333333",
           color: "#333333",
           "&:hover": {
@@ -68,7 +76,6 @@ const theme = createTheme({
           },
         },
         text: {
-          // Styles for the text button
           color: "#000000",
           "&:hover": {
             backgroundColor: "#f0f0f0",
@@ -87,6 +94,13 @@ const theme = createTheme({
           "&.Mui-focused": {
             borderColor: "#000000",
           },
+        },
+      },
+    },
+    MuiCircularProgress: {
+      styleOverrides: {
+        root: {
+          color: "#ffffff",
         },
       },
     },

@@ -30,14 +30,16 @@ const Button: React.FC<IButtonProps> = (props) => {
   } = props;
 
   return (
-    <MuiButton
-      {...props}
-      fullWidth
-      onClick={onClick}
-      sx={{ ...props.sx, height: 44 }}
-    >
-      {props.children}
-    </MuiButton>
+    <>
+      <MuiButton
+        {...props}
+        fullWidth
+        onClick={onClick}
+        sx={{ ...props.sx, height: 44, borderRadius: "8px" }}
+      >
+        {props.children}
+      </MuiButton>
+    </>
   );
 };
 

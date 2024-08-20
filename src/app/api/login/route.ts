@@ -7,7 +7,6 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const { phoneNumber, password } = req.body;
-
     try {
       const response = await axios.post("http://localhost:4000/auth/signin", {
         phoneNumber,

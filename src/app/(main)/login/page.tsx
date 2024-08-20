@@ -2,42 +2,43 @@
 
 import Button from "@/components/atom/Button";
 import Input from "@/components/atom/Input";
-import { Typography, Box, Divider } from "@mui/material";
+import { Typography, Box, Divider, CircularProgress } from "@mui/material";
 import Image from "next/image";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
+import axios from "axios";
+import React from "react";
+import { useToast } from "@/hooks/useToast";
 
 interface ILoginPageProps {}
 
 const LoginPage: React.FC<ILoginPageProps> = (props) => {
   const { control, handleSubmit } = useForm();
+  const [loading, setLoading] = React.useState(false);
+  const toast = useToast();
 
   const handlePressLogin = async (values: any) => {
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: values,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Login successful:", data);
-        // Handle successful login (e.g., redirect to dashboard)
+      setLoading(true);
+      const response = await axios.post(
+        "http://localhost:4000/auth/signin",
+        values
+      );
+      const { success, data, error } = response.data;
+      if (success) {
+        setLoading(false);
+        toast.sendToast("Success", "Login successfully");
       } else {
-        const errorData = await response.json();
-        console.error("Login failed:", errorData);
-        // Handle login failure (e.g., show error message)
+        setLoading(false);
+        toast.sendToast("Error", "Login failed", "error");
       }
     } catch (error) {
-      console.error("An error occurred:", error);
-      // Handle network or other errors
+      setLoading(false);
+      toast.sendToast("Error", "Login failed", "error");
     }
   };
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center bg-white">
+    <div className="w-full h-screen flex justify-center items-center bg-white">
       <Box
         sx={{
           display: "flex",
@@ -66,7 +67,7 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
           <span>Sign in with Google </span>
           <Image
             alt="google-logo"
-            src={require("../../assets/icons/google.png")}
+            src={require("../../../assets/icons/google.png")}
             width={20}
             height={20}
             style={{ marginLeft: "8px" }}
@@ -91,17 +92,20 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
             mode="password"
           />
           <Button
-            type="submit" // Ensure the button type is submit
+            type="submit"
             variant="contained"
             sx={{ mt: 2 }}
+            isLoading={loading}
           >
             Continue with phone number
           </Button>
+
+          <CircularProgress size={24} />
         </form>
 
         <Box>
           <Typography sx={{ fontSize: "14px", color: "GrayText" }}>
-            By sign in, you agree to Dakoli's Terms of Service and Privacy
+            By sign in, you agree to Market Floor's Terms of Service and Privacy
             Policy, as well as the Cookie Policy
           </Typography>
         </Box>

@@ -104,7 +104,7 @@ const Input: React.FC<IInputProps> = (props) => {
       render={({ formState: { errors }, field: { value, onChange } }) => (
         <>
           <TextField
-            InputProps={{ sx: { height: 44 } }}
+            InputProps={{ sx: { height: 44, borderRadius: "8px" } }}
             type={mode}
             placeholder={props.placeholder}
             fullWidth
@@ -115,6 +115,7 @@ const Input: React.FC<IInputProps> = (props) => {
               onChange(e.target.value);
             }}
             sx={{
+              borderRadius: "8px",
               "& .MuiInputLabel-root": {
                 top: "-4px", // Adjust the label position if needed
               },
