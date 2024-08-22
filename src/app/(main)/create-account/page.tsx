@@ -8,32 +8,44 @@ import { set, useForm } from "react-hook-form";
 import axios from "axios";
 import React from "react";
 import { useToast } from "@/hooks/useToast";
+import { useRouter } from "next/navigation";
 
-interface ILoginPageProps {}
+interface ICreateAccountPageProps {}
 
-const LoginPage: React.FC<ILoginPageProps> = (props) => {
+const CreateAccountPage: React.FC<ICreateAccountPageProps> = (props) => {
   const { control, handleSubmit } = useForm();
   const [loading, setLoading] = React.useState(false);
   const toast = useToast();
+  const router = useRouter();
 
-  const handlePressLogin = async (values: any) => {
+  const handlePressRegister = async (values: any) => {
     try {
       setLoading(true);
-      const response = await axios.post(
-        "http://localhost:4000/auth/signin",
-        values
-      );
+      const response = await axios.post("http://localhost:4000/auth/signup", {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        phoneNumber: values.phoneNumber,
+        password: values.password,
+        role: "user",
+        username: values.username,
+      });
       const { success, data, error } = response.data;
       if (success) {
         setLoading(false);
-        toast.sendToast("Success", "Login successfully");
+        toast.sendToast("Success", "Sign up successfully");
+        router.replace(
+          `/verify-account?phoneNumber=${(
+            values.phoneNumber as string
+          ).substring(1)}`
+        );
       } else {
         setLoading(false);
-        toast.sendToast("Error", "Login failed", "error");
+        toast.sendToast("Error", "Sign up failed", "error");
       }
     } catch (error) {
       setLoading(false);
-      toast.sendToast("Error", "Login failed", "error");
+      toast.sendToast("Error", "Sign up failed", "error");
     }
   };
 
@@ -53,7 +65,7 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
       >
         <Box>
           <Typography sx={{ fontWeight: "600" }} variant="h4">
-            Sign in
+            Create account
           </Typography>
           <Typography
             sx={{ marginTop: "16px", fontSize: "14px", color: "GrayText" }}
@@ -78,14 +90,41 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
         <Divider sx={{ height: 4, width: "100%", margin: "4px 0" }} />
 
         <form
-          onSubmit={handleSubmit(handlePressLogin)}
+          onSubmit={handleSubmit(handlePressRegister)}
           className="w-full flex gap-y-6 flex-col"
         >
+          <div className="w-full grid grid-cols-2 gap-x-2">
+            <Input
+              control={control}
+              name="firstName"
+              label="First Name"
+              placeholder="Enter your first name"
+            />
+            <Input
+              control={control}
+              name="lastName"
+              label="Last Name"
+              placeholder="Enter your last name"
+            />
+          </div>
+
+          <Input
+            name="username"
+            control={control}
+            label="Username"
+            placeholder="Enter your username"
+          />
+          <Input
+            name="email"
+            control={control}
+            label="Email"
+            placeholder="Enter your email address"
+          />
           <Input
             name="phoneNumber"
             control={control}
-            label="Số điện thoại"
-            placeholder="Nhập số điện thoại của bạn"
+            label="Phone number"
+            placeholder="Enter your phone number"
           />
           <Input
             control={control}
@@ -94,13 +133,20 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
             placeholder="Nhập mật khẩu của bạn"
             mode="password"
           />
+          <Input
+            control={control}
+            name="confirmPassword"
+            label="Xác nhận mật khẩu"
+            placeholder="Nhập lại mật khẩu của bạn"
+            mode="password"
+          />
           <Button
             type="submit"
             variant="contained"
             sx={{ mt: 2 }}
             isLoading={loading}
           >
-            Continue with phone number
+            Create your account
           </Button>
 
           <CircularProgress size={24} />
@@ -118,7 +164,7 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
           <Typography
             sx={{ fontSize: "14px", color: "GrayText", textAlign: "center" }}
           >
-            Dont have an account? Sign up
+            Already have an account? Sign in
           </Typography>
         </Box>
       </Box>
@@ -126,4 +172,4 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
   );
 };
 
-export default LoginPage;
+export default CreateAccountPage;

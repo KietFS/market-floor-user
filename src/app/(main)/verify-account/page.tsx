@@ -1,39 +1,48 @@
 "use client";
 
 import Button from "@/components/atom/Button";
-import Input from "@/components/atom/Input";
 import { Typography, Box, Divider, CircularProgress } from "@mui/material";
-import Image from "next/image";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import React from "react";
 import { useToast } from "@/hooks/useToast";
+import OTPInput from "@/components/atom/OtpInput";
+
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface ILoginPageProps {}
 
-const LoginPage: React.FC<ILoginPageProps> = (props) => {
+const VerifyAccount: React.FC<ILoginPageProps> = (props) => {
   const { control, handleSubmit } = useForm();
   const [loading, setLoading] = React.useState(false);
   const toast = useToast();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  const handlePressLogin = async (values: any) => {
+  const phoneNumberValue = `+${searchParams.get("phoneNumber")}`;
+
+  const handlePressVerifyAccount = async (values: any) => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:4000/auth/signin",
-        values
+        "http://localhost:4000/auth/verify-otp",
+        {
+          otpCode: values.otp,
+          phoneNumber: phoneNumberValue,
+        }
       );
       const { success, data, error } = response.data;
       if (success) {
         setLoading(false);
-        toast.sendToast("Success", "Login successfully");
+        toast.sendToast("Success", "Verify successfully");
+        router.replace(`/login`);
       } else {
         setLoading(false);
-        toast.sendToast("Error", "Login failed", "error");
+        toast.sendToast("Error", "Verify failed", "error");
       }
     } catch (error) {
       setLoading(false);
-      toast.sendToast("Error", "Login failed", "error");
+      toast.sendToast("Error", "Verify failed", "error");
     }
   };
 
@@ -53,46 +62,27 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
       >
         <Box>
           <Typography sx={{ fontWeight: "600" }} variant="h4">
-            Sign in
+            Verfiy your account
           </Typography>
           <Typography
             sx={{ marginTop: "16px", fontSize: "14px", color: "GrayText" }}
           >
-            Welcome to Market Floor, a market places connects retailer and
-            customers. Here, you can find a wide variety of products from
-            trusted sellers. Enjoy a seamless shopping experience with us.
+            We have sent a verification code to your phone number, please enter
+            to verify it
           </Typography>
         </Box>
-
-        <Button variant="outlined">
-          <span>Sign in with Google </span>
-          <Image
-            alt="google-logo"
-            src={require("../../../assets/icons/google.png")}
-            width={20}
-            height={20}
-            style={{ marginLeft: "8px" }}
-          />
-        </Button>
 
         <Divider sx={{ height: 4, width: "100%", margin: "4px 0" }} />
 
         <form
-          onSubmit={handleSubmit(handlePressLogin)}
+          onSubmit={handleSubmit(handlePressVerifyAccount)}
           className="w-full flex gap-y-6 flex-col"
         >
-          <Input
-            name="phoneNumber"
+          <OTPInput
             control={control}
-            label="Số điện thoại"
-            placeholder="Nhập số điện thoại của bạn"
-          />
-          <Input
-            control={control}
-            name="password"
-            label="Mật khẩu"
-            placeholder="Nhập mật khẩu của bạn"
-            mode="password"
+            name="otp"
+            label="OTP"
+            placeholder="Enter your otp code"
           />
           <Button
             type="submit"
@@ -100,16 +90,15 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
             sx={{ mt: 2 }}
             isLoading={loading}
           >
-            Continue with phone number
+            Verify your phone number
           </Button>
-
-          <CircularProgress size={24} />
         </form>
 
         <Box>
           <Typography sx={{ fontSize: "14px", color: "GrayText" }}>
-            By sign in, you agree to Market Floor's Terms of Service and Privacy
-            Policy, as well as the Cookie Policy
+            By verifying your account, you agree to Market Floor's Terms of
+            Service and Privacy Policy, as well as the Cookie Policy. This helps
+            us ensure the security and integrity of our platform.
           </Typography>
         </Box>
         <Divider sx={{ height: 4, width: "100%" }} />
@@ -126,4 +115,4 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
   );
 };
 
-export default LoginPage;
+export default VerifyAccount;
