@@ -4,7 +4,7 @@ import Button from "@/components/atom/Button";
 import Input from "@/components/atom/Input";
 import { Typography, Box, Divider, CircularProgress } from "@mui/material";
 import Image from "next/image";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import React from "react";
 import { useToast } from "@/hooks/useToast";
@@ -13,7 +13,13 @@ import { useRouter } from "next/navigation";
 interface ICreateAccountPageProps {}
 
 const CreateAccountPage: React.FC<ICreateAccountPageProps> = (props) => {
-  const { control, handleSubmit } = useForm();
+  const {
+    control,
+    handleSubmit,
+    register,
+    getValues,
+    formState: { errors },
+  } = useForm();
   const [loading, setLoading] = React.useState(false);
   const toast = useToast();
   const router = useRouter();
@@ -21,15 +27,18 @@ const CreateAccountPage: React.FC<ICreateAccountPageProps> = (props) => {
   const handlePressRegister = async (values: any) => {
     try {
       setLoading(true);
-      const response = await axios.post("http://localhost:4000/auth/signup", {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        phoneNumber: values.phoneNumber,
-        password: values.password,
-        role: "user",
-        username: values.username,
-      });
+      const response = await axios.post(
+        "http://localhost:3000/api/create-account",
+        {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          email: values.email,
+          phoneNumber: values.phoneNumber,
+          password: values.password,
+          role: "user",
+          username: values.username,
+        }
+      );
       const { success, data, error } = response.data;
       if (success) {
         setLoading(false);
@@ -41,11 +50,16 @@ const CreateAccountPage: React.FC<ICreateAccountPageProps> = (props) => {
         );
       } else {
         setLoading(false);
-        toast.sendToast("Error", "Sign up failed", "error");
+        toast.sendToast("Error", data?.message, "error");
       }
-    } catch (error) {
+    } catch (error: any) {
+      console.log("current error is", error);
       setLoading(false);
-      toast.sendToast("Error", "Sign up failed", "error");
+      toast.sendToast(
+        "Error",
+        error?.response?.data?.message || "Register error",
+        "error"
+      );
     }
   };
 
@@ -76,7 +90,7 @@ const CreateAccountPage: React.FC<ICreateAccountPageProps> = (props) => {
           </Typography>
         </Box>
 
-        <Button variant="outlined">
+        <Button variant="secondary">
           <span>Sign in with Google </span>
           <Image
             alt="google-logo"
@@ -99,12 +113,14 @@ const CreateAccountPage: React.FC<ICreateAccountPageProps> = (props) => {
               name="firstName"
               label="First Name"
               placeholder="Enter your first name"
+              rules={{ required: "First name is required" }}
             />
             <Input
               control={control}
               name="lastName"
               label="Last Name"
               placeholder="Enter your last name"
+              rules={{ required: "Last name is required" }}
             />
           </div>
 
@@ -113,18 +129,21 @@ const CreateAccountPage: React.FC<ICreateAccountPageProps> = (props) => {
             control={control}
             label="Username"
             placeholder="Enter your username"
+            rules={{ required: "Username is required" }}
           />
           <Input
             name="email"
             control={control}
             label="Email"
             placeholder="Enter your email address"
+            rules={{ required: "Email is required" }}
           />
           <Input
             name="phoneNumber"
             control={control}
             label="Phone number"
             placeholder="Enter your phone number"
+            rules={{ required: "Phone number is required" }}
           />
           <Input
             control={control}
@@ -132,6 +151,7 @@ const CreateAccountPage: React.FC<ICreateAccountPageProps> = (props) => {
             label="Mật khẩu"
             placeholder="Nhập mật khẩu của bạn"
             mode="password"
+            rules={{ required: "Password is required" }}
           />
           <Input
             control={control}
@@ -139,17 +159,20 @@ const CreateAccountPage: React.FC<ICreateAccountPageProps> = (props) => {
             label="Xác nhận mật khẩu"
             placeholder="Nhập lại mật khẩu của bạn"
             mode="password"
+            rules={{
+              required: "Confirm password is required",
+              validate: (value: any) =>
+                value === getValues("password") || "Passwords do not match",
+            }}
           />
           <Button
             type="submit"
-            variant="contained"
-            sx={{ mt: 2 }}
+            variant="primary"
+            className="mt-2 w-full"
             isLoading={loading}
           >
             Create your account
           </Button>
-
-          <CircularProgress size={24} />
         </form>
 
         <Box>

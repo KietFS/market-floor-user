@@ -1,119 +1,42 @@
-"use client";
+import React from "react";
+import { Controller } from "react-hook-form";
+import TextField from "@mui/material/TextField";
+import FormHelperText from "@mui/material/FormHelperText";
 
-import {
-  ChangeEvent,
-  DetailedHTMLProps,
-  InputHTMLAttributes,
-  useEffect,
-  useState,
-} from "react";
-import { Control, Controller, useForm } from "react-hook-form";
-
-//icons
-import {
-  EnvelopeIcon,
-  LockClosedIcon,
-  PhoneIcon,
-  UserCircleIcon,
-  CheckBadgeIcon,
-  PencilIcon,
-} from "@heroicons/react/20/solid";
-import { Input as MuiInput, TextField } from "@mui/material";
-
-type IInputMode =
-  | "email"
-  | "password"
-  | "confirmPassword"
-  | "text"
-  | "phoneNumber"
-  | "name";
-
-interface IInputProps
-  extends DetailedHTMLProps<
-    InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  > {
+interface InputProps {
+  control: any;
   name: string;
-  className?: string;
-  label?: string | null;
-  isRequired?: boolean;
-  hasEvent?: boolean;
-  control: Control;
-  onClickEvent?: () => void;
-  // use onChangeValue instead of onChange, since Formik will overwrite the onChange
-  onChangeValue?: (value: string | number) => void;
-  readonly onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-  mode?: IInputMode;
+  label: string;
+  placeholder: string;
+  mode?: string;
+  rules?: any;
 }
 
-//Need to fix bug on blur
-const Input: React.FC<IInputProps> = (props) => {
-  const {
-    name,
-    className,
-    isRequired,
-    label = null,
-    hasEvent = false,
-    onClickEvent,
-    onChangeValue,
-    mode = "text",
-    control,
-  } = props;
-  const [focus, setFocus] = useState<boolean>(false);
-  const {} = useForm();
-  const objectTypes = {
-    email: {
-      icon: <EnvelopeIcon width={20} height={20} color="gray" />,
-      placeholder: "johndoe@gmail.com",
-    },
-    name: {
-      icon: <UserCircleIcon width={20} height={20} color="gray" />,
-      placeholder: "John Doe",
-    },
-    password: {
-      icon: <LockClosedIcon width={20} height={20} color="gray" />,
-      placeholder: "**********",
-    },
-
-    confirmPassword: {
-      icon: <CheckBadgeIcon width={20} height={20} color="gray" />,
-      placeholder: "**********",
-    },
-    phoneNumber: {
-      icon: <PhoneIcon width={20} height={20} color="gray" />,
-      placeholder: "0809211211",
-    },
-    text: {
-      icon: <PencilIcon width={20} height={20} color="gray" />,
-      placeholder: "Your text here",
-    },
-  };
-
-  const handleOnBlur = () => {
-    setFocus(false);
-  };
-
-  const handleOnFocus = () => {
-    setFocus(true);
-  };
-
+const Input: React.FC<InputProps> = ({
+  control,
+  name,
+  label,
+  placeholder,
+  mode = "text",
+  rules,
+}) => {
   return (
     <Controller
       control={control}
       name={name}
-      render={({ formState: { errors }, field: { value, onChange } }) => (
-        <>
+      rules={rules}
+      render={({ field: { value, onChange }, fieldState: { error } }) => (
+        <div className="flex flex-col gap-y-4">
           <TextField
             InputProps={{ sx: { height: 44, borderRadius: "8px" } }}
             type={mode}
-            placeholder={props.placeholder}
+            placeholder={placeholder}
             fullWidth
             value={value}
             label={label}
             id="input"
-            onChange={(e) => {
-              onChange(e.target.value);
-            }}
+            onChange={(e) => onChange(e.target.value)}
+            error={!!error}
             sx={{
               borderRadius: "8px",
               "& .MuiInputLabel-root": {
@@ -121,7 +44,12 @@ const Input: React.FC<IInputProps> = (props) => {
               },
             }}
           />
-        </>
+          {error && (
+            <FormHelperText sx={{ marginTop: -1 }} error>
+              {error.message}
+            </FormHelperText>
+          )}
+        </div>
       )}
     />
   );

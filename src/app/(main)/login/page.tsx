@@ -38,7 +38,7 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
   };
 
   return (
-    <div className="w-full h-screen flex justify-center items-center bg-white">
+    <div className="w-full h-auto flex justify-center items-center bg-white">
       <Box
         sx={{
           display: "flex",
@@ -64,7 +64,7 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
           </Typography>
         </Box>
 
-        <Button variant="outlined">
+        <Button variant="secondary">
           <span>Sign in with Google </span>
           <Image
             alt="google-logo"
@@ -86,6 +86,7 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
             control={control}
             label="Số điện thoại"
             placeholder="Nhập số điện thoại của bạn"
+            rules={{ required: "Phone number is required" }}
           />
           <Input
             control={control}
@@ -93,11 +94,12 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
             label="Mật khẩu"
             placeholder="Nhập mật khẩu của bạn"
             mode="password"
+            rules={{ required: "Password is required" }}
           />
           <Button
             type="submit"
-            variant="contained"
-            sx={{ mt: 2 }}
+            variant="primary"
+            className="mt-2"
             isLoading={loading}
           >
             Continue with phone number
