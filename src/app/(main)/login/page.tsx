@@ -28,7 +28,7 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
       const { success, data, error } = response.data;
       if (success) {
         setLoading(false);
-        toast.sendToast("Success", data?.message);
+        toast.sendToast("Success", "Login successfully");
       } else {
         setLoading(false);
         toast.sendToast("Error", "Login failed", data?.message);
@@ -97,15 +97,15 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
           <Input
             name="phoneNumber"
             control={control}
-            label="Số điện thoại"
-            placeholder="Nhập số điện thoại của bạn"
+            label="Phone number"
+            placeholder="Enter your phone number"
             rules={{ required: "Phone number is required" }}
           />
           <Input
             control={control}
             name="password"
-            label="Mật khẩu"
-            placeholder="Nhập mật khẩu của bạn"
+            label="Password"
+            placeholder="Enter your password"
             mode="password"
             rules={{ required: "Password is required" }}
           />

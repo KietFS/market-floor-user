@@ -27,7 +27,7 @@ const SearchBar: React.FC<ISearchBarProps> = (props) => {
           onChange(e.target.value);
         }}
         sx={{
-          backgroundColor: "#e5e7eb",
+          backgroundColor: "#f6f7f9",
           borderRadius: "20px 0 0 20px",
           padding: "0px 16px",
           "& .MuiOutlinedInput-root": {
@@ -51,7 +51,7 @@ const SearchBar: React.FC<ISearchBarProps> = (props) => {
         inputProps={{ "aria-label": "category" }}
         sx={{
           height: 40,
-          backgroundColor: "#e5e7eb",
+          backgroundColor: "#f6f7f9",
           borderRadius: "0 20px 20px 0",
           padding: "0px 16px",
           "& .MuiOutlinedInput-root": {

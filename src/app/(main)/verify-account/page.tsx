@@ -34,7 +34,7 @@ const VerifyAccount: React.FC<ILoginPageProps> = (props) => {
       const { success, data, error } = response.data;
       if (success) {
         setLoading(false);
-        toast.sendToast("Success", data?.message);
+        toast.sendToast("Success", "Verify phone number successfully");
         router.replace(`/login`);
       } else {
         setLoading(false);

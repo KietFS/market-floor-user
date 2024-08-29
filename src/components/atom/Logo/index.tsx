@@ -12,6 +12,7 @@ const Logo: React.FC = () => {
         display: "flex",
         columnGap: "12px",
         alignItems: "center",
+        cursor: "pointer",
       }}
     >
       <Image

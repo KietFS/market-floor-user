@@ -15,7 +15,9 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <CssBaseline />
         <Header />
 
-        <ToastProvider> {children}</ToastProvider>
+        <ToastProvider>
+          <div style={{ minHeight: "70vh" }}>{children}</div>
+        </ToastProvider>
 
         <Footer />
       </body>
