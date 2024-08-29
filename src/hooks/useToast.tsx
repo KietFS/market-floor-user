@@ -46,7 +46,8 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
         open={open}
         autoHideDuration={6000}
         onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{ zIndex: 10000 }}
       >
         <Alert onClose={handleClose} severity={type} sx={{ width: "100%" }}>
           <strong>{title}</strong> - {message}

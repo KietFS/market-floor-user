@@ -8,6 +8,7 @@ import { set, useForm } from "react-hook-form";
 import axios from "axios";
 import React from "react";
 import { useToast } from "@/hooks/useToast";
+import { useRouter } from "next/navigation";
 
 interface ILoginPageProps {}
 
@@ -15,6 +16,7 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
   const { control, handleSubmit } = useForm();
   const [loading, setLoading] = React.useState(false);
   const toast = useToast();
+  const router = useRouter();
 
   const handlePressLogin = async (values: any) => {
     try {
@@ -26,14 +28,25 @@ const LoginPage: React.FC<ILoginPageProps> = (props) => {
       const { success, data, error } = response.data;
       if (success) {
         setLoading(false);
-        toast.sendToast("Success", "Login successfully");
+        toast.sendToast("Success", data?.message);
       } else {
         setLoading(false);
-        toast.sendToast("Error", "Login failed", "error");
+        toast.sendToast("Error", "Login failed", data?.message);
       }
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
-      toast.sendToast("Error", "Login failed", "error");
+      if (error?.response?.status == 410) {
+        router.push(
+          `/verify-account?phoneNumber=${(
+            values.phoneNumber as string
+          ).substring(1)}`
+        );
+      }
+      toast.sendToast(
+        "Error",
+        error?.response?.data?.message || "Login error",
+        "error"
+      );
     }
   };
 

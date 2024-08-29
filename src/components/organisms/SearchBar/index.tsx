@@ -35,6 +35,9 @@ const SearchBar: React.FC<ISearchBarProps> = (props) => {
               border: "none",
             },
           },
+          "& .MuiOutlinedInput-notchedOutline": {
+            border: "none",
+          },
           "& .MuiInputLabel-root": {
             top: "-4px", // Adjust the label position if needed
           },
@@ -56,11 +59,12 @@ const SearchBar: React.FC<ISearchBarProps> = (props) => {
               border: "none",
             },
           },
+          "& .MuiOutlinedInput-notchedOutline": {
+            border: "none",
+          },
         }}
       >
-        <MenuItem value="">
-          <em>All Categories</em>
-        </MenuItem>
+        <MenuItem value="">All Categories </MenuItem>
         <MenuItem value="electronics">Electronics</MenuItem>
         <MenuItem value="fashion">Fashion</MenuItem>
         <MenuItem value="home-garden">Home & Garden</MenuItem>

@@ -34,11 +34,11 @@ const VerifyAccount: React.FC<ILoginPageProps> = (props) => {
       const { success, data, error } = response.data;
       if (success) {
         setLoading(false);
-        toast.sendToast("Success", "Verify successfully");
+        toast.sendToast("Success", data?.message);
         router.replace(`/login`);
       } else {
         setLoading(false);
-        toast.sendToast("Error", "Verify failed", "error");
+        toast.sendToast("Error", data?.message, "error");
       }
     } catch (error) {
       setLoading(false);
@@ -86,8 +86,8 @@ const VerifyAccount: React.FC<ILoginPageProps> = (props) => {
           />
           <Button
             type="submit"
-            variant="contained"
-            sx={{ mt: 2 }}
+            variant="primary"
+            className="mt-2"
             isLoading={loading}
           >
             Verify your phone number
