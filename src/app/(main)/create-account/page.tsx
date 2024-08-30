@@ -9,6 +9,7 @@ import axios from "axios";
 import React from "react";
 import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface ICreateAccountPageProps {}
 
@@ -185,9 +186,20 @@ const CreateAccountPage: React.FC<ICreateAccountPageProps> = (props) => {
 
         <Box>
           <Typography
-            sx={{ fontSize: "14px", color: "GrayText", textAlign: "center" }}
+            sx={{
+              fontSize: "14px",
+              color: "GrayText",
+              textAlign: "center",
+              columnGap: "2px",
+            }}
           >
-            Already have an account? Sign in
+            Already have an account?
+            <Link
+              style={{ marginLeft: "4px", textDecoration: "underline" }}
+              href="/login"
+            >
+              Sign in
+            </Link>
           </Typography>
         </Box>
       </Box>

@@ -105,9 +105,24 @@ const VerifyAccount: React.FC<ILoginPageProps> = (props) => {
 
         <Box>
           <Typography
-            sx={{ fontSize: "14px", color: "GrayText", textAlign: "center" }}
+            sx={{
+              fontSize: "14px",
+              color: "GrayText",
+              textAlign: "center",
+              columnGap: "2px",
+            }}
           >
-            Dont have an account? Sign up
+            Didn't received one time password?
+            <Typography
+              style={{
+                marginLeft: "4px",
+                marginRight: "4px",
+                textDecoration: "underline",
+              }}
+            >
+              Resend OTP
+            </Typography>
+            After 40s
           </Typography>
         </Box>
       </Box>
