@@ -4,7 +4,9 @@ import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "@/theme";
-
+import Header from "@/components/organisms/Header";
+import { ToastProvider } from "@/hooks/useToast";
+import Footer from "@/components/molecules/Footer";
 
 const inter = Lexend({ subsets: ["latin"] });
 
@@ -22,8 +24,16 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
+          <AppRouterCacheProvider>
+            <CssBaseline />
+            <Header />
+
+            <ToastProvider>
+              <div style={{ minHeight: "70vh" }}>{children}</div>
+            </ToastProvider>
+
+            <Footer />
+          </AppRouterCacheProvider>
         </ThemeProvider>
       </body>
     </html>

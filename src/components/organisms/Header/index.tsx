@@ -17,8 +17,9 @@ import { useRouter } from "next/navigation";
 
 import axios from "axios";
 import { Box, MenuItem, OutlinedInput, Select, TextField } from "@mui/material";
-import SearchBar from "../SearchBar";
+import SearchBar from "../../molecules/SearchBar";
 import Logo from "@/components/atom/Logo";
+import FulfillmentMangement from "../FulfillmentMangement";
 
 interface IHeaderV2Props {}
 
@@ -49,9 +50,7 @@ const HeaderV2: React.FC<IHeaderV2Props> = (props) => {
           <div className="flex w-1/3 laptop:hidden laptop:w-0 flex-row-reverse">
             {false ? null : (
               <div className="flex flex-row-reverse laptop:hidden  w-1/3 laptop:w-0">
-                <button className="p-2 text-black-500 rounded-full bg-transparent justify-center items-center flex border border-gray-100">
-                  <TruckIcon className="w-8 h-8 text-gray-600 mr-1" />
-                </button>
+                <FulfillmentMangement />
               </div>
             )}
           </div>
