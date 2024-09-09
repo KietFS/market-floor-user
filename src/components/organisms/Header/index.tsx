@@ -71,13 +71,7 @@ const HeaderV2: React.FC<IHeaderV2Props> = (props) => {
               >
                 <UserIcon className="w-8 h-8 text-gray-600" />
               </button>
-              <button
-                onClick={() => setOpenLogin(true)}
-                className="p-2 text-black-500 rounded-full bg-transparent justify-center items-center flex border border-gray-100"
-              >
-                <TruckIcon className="w-8 h-8 text-gray-600 mr-1" />
-                Store 7
-              </button>
+              <FulfillmentMangement />
               <button
                 className=" rounded-xl px-4 py-2 text-center text-gray-600  text-sm w-fit flex space-x-1 items-center hover:bg-gray-100"
                 onClick={() => router.replace("/login")}
